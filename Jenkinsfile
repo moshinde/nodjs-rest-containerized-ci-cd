@@ -24,7 +24,10 @@ pipeline {
         stage('Deploy in container'){
             steps{
                 script{
-                    sh 'docker-compose up -d'
+                    kubernetesDeploy configs: 'deploy.cd.yml',
+                            kubeConfig: [path: ''],
+                            kubeconfigId: 'k8s-jenkins',
+                            enableConfigSubstitution: true
                 }
             }
         }
