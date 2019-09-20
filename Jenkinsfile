@@ -6,7 +6,7 @@ pipeline {
                 script {
                     echo "who am i?"
                     sh "whoami"
-                        exchange_image=docker.build("monicashinde3/nodjs-rest-containerized-ci-cd")                    
+                        nodejs_image=docker.build("monicashinde3/nodjs-rest-containerized-ci-cd:${env.BUILD_ID}")                    
                 }
             }
         }
@@ -15,8 +15,7 @@ pipeline {
             steps{
                 script {
                     withDockerRegistry([ credentialsId: "docker-hub-user", url: "" ]){
-                        exchange_image.push()
-                        conversion_image.push()
+                        nodejs_image.push()
                     }
                 }
             }
