@@ -4,6 +4,8 @@ metadata:
   name: $ENV
   labels:
     name: $ENV
+  annotations:
+    scheduler.alpha.kubernetes.io/node-selector: env=$ENV
 ---
 
 apiVersion: apps/v1
