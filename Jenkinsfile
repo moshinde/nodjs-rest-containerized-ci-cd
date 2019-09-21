@@ -24,7 +24,7 @@ pipeline {
         stage('Deploy in container'){
             steps{
                 script{
-                    env.ENV='DEV'
+                    env.ENV="dev"
                     kubernetesDeploy configs: 'deploy.cd.yml',
                             kubeConfig: [path: ''],
                             kubeconfigId: 'k8s-jenkins',
