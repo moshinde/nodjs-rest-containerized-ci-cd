@@ -1,5 +1,8 @@
 pipeline {
 	agent any
+    parameters {
+        choice(name: 'ENVIRONMENT', choices: ['DEV', 'PROD'], description: 'Pick Environment')
+    }
     stages{                
         stage('Build Docker Image'){
             steps{
@@ -24,7 +27,7 @@ pipeline {
         stage('Deploy in container'){
             steps{
                 script{
-                    env.ENV="dev"
+                    env.ENV="${params.ENVIRONMENT}"
                     kubernetesDeploy configs: 'deploy.cd.yml',
                             kubeConfig: [path: ''],
                             kubeconfigId: 'k8s-jenkins',
