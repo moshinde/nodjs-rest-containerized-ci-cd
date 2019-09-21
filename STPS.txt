@@ -1,0 +1,5 @@
+STEPS:
+
+create Master node with Jenkins and kubernetes master deployed
+installl kubernetes plugin along with kubernetes creds provider
+add new credentials with ID k8s-jenkins and copy the content of $HOME/.kube/config file to the kubeconfig feild in the credentials section of jenkins
