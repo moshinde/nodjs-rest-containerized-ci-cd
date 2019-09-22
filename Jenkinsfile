@@ -1,5 +1,8 @@
 pipeline {
 	agent any
+    parameters {
+        string(name: 'PORT', defaultValue: "30000", description: 'look for the free port')
+    }
     stages{                
         stage('Build Docker Image'){
             steps{
@@ -29,7 +32,7 @@ pipeline {
                     }else{
                         env.ENV="dev"
                     }
-                    
+                    env.PORT="${params.PORT}"
                     kubernetesDeploy configs: 'deploy.cd.yml',
                             kubeConfig: [path: ''],
                             kubeconfigId: 'k8s-jenkins',
