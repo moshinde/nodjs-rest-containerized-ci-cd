@@ -35,7 +35,7 @@ pipeline {
                     env.PORT="${params.PORT}"
                     kubernetesDeploy configs: 'deploy.cd.yml',
                             kubeConfig: [path: ''],
-                            kubeconfigId: '4eb0a504-b65e-42b5-ba2e-2e920cb48a33',
+                            kubeconfigId: '4d56eb71-6b10-4ed9-9c94-1335210432fa',
                             enableConfigSubstitution: true
                 }
             }
