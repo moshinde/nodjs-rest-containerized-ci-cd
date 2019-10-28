@@ -35,7 +35,7 @@ pipeline {
                     env.PORT="${params.PORT}"
                     kubernetesDeploy configs: 'deploy.cd.yml',
                             kubeConfig: [path: ''],
-                            kubeconfigId: '4d56eb71-6b10-4ed9-9c94-1335210432fa',
+                            kubeconfigId: 'jenkins-service-acct-kubeconfig',
                             enableConfigSubstitution: true
                 }
             }
