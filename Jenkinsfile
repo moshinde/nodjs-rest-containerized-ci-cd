@@ -5,19 +5,26 @@ podTemplate(label: label, containers: [
   ) {
     node(label) {
 	parameters {
-        	tgstring(name: 'PORT', defaultValue: "30000", description: 'look for the free port')
+        	string(name: 'PORT', defaultValue: "30000", description: 'look for the free port')
     	}
-        stage('Build Docker Image'){
+        stage('Checkout'){
             container('docker') {
-                git 'https://github.com/moshinde/nodjs-rest-containerized-ci-cd.git'
                 script {
                     sh 'whoami'
-                    sh 'ls /home/jenkins/agent/workspace'
+                    git 'https://github.com/moshinde/nodjs-rest-containerized-ci-cd.git'
+                    sh 'ls -ltr  /home/jenkins/agent/workspace'
+                    sh 'pwd'
+                }
+            }
+        }
+        stage('Build Docker Image'){
+            container('docker') {
+                script {
+                    sh 'pwd'
                     nodejs_image=docker.build("monicashinde3/nodjs-rest-containerized-ci-cd:${env.BUILD_ID}")                    
                 }
             }
         }
-
         stage('Push to Docker hub'){
             container('docker') {
                 script {
@@ -45,5 +52,4 @@ podTemplate(label: label, containers: [
             }
         }
     }
-
 }
