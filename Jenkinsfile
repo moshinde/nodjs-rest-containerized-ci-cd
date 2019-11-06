@@ -1,21 +1,25 @@
-pipeline {
-	agent any
-    parameters {
-        string(name: 'PORT', defaultValue: "30000", description: 'look for the free port')
-    }
-    stages{                
+def label = "pod-${env.JOB_NAME}-${env.BUILD_NUMBER}".replace('_', '-').replace('/', '-')
+podTemplate(label: label, containers: [
+    containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true)],
+    volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]
+  ) {
+    node(label) {
+	parameters {
+        	tgstring(name: 'PORT', defaultValue: "30000", description: 'look for the free port')
+    	}
         stage('Build Docker Image'){
-            steps{
+            container('docker') {
+                git 'https://github.com/moshinde/nodjs-rest-containerized-ci-cd.git'
                 script {
-                    echo "who am i?"
-                    sh "whoami"
-                        nodejs_image=docker.build("monicashinde3/nodjs-rest-containerized-ci-cd:${env.BUILD_ID}")                    
+                    sh 'whoami'
+                    sh 'ls /home/jenkins/agent/workspace'
+                    nodejs_image=docker.build("monicashinde3/nodjs-rest-containerized-ci-cd:${env.BUILD_ID}")                    
                 }
             }
         }
 
         stage('Push to Docker hub'){
-            steps{
+            container('docker') {
                 script {
                     withDockerRegistry([ credentialsId: "docker-hub-user", url: "" ]){
                         nodejs_image.push()
@@ -25,7 +29,7 @@ pipeline {
         }
 
         stage('Deploy in container'){
-            steps{
+            container('docker') {
                 script{
                     if (env.BRANCH_NAME == 'master'){
                         env.ENV="prod"
@@ -41,5 +45,5 @@ pipeline {
             }
         }
     }
-    
+
 }
